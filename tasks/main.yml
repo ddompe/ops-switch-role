@@ -1,5 +1,5 @@
 ---
-- name: debug JSON template
+- name: print out JSON input for this play
   debug: >
     msg="{{ lookup('template', 'main.j2') }}"
   when: ops_debug is sameas true
