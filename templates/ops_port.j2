@@ -1,7 +1,7 @@
 {# OpenSwitch Port table JSON template file #}
 
 "Port": {
-  {% for port in ports %}
+  {% for port in ops_ports %}
     "{{ port.name }}": {
       {% if port.interfaces is defined %}
         "interfaces": [

@@ -1,7 +1,7 @@
 {# OpenSwitch Interface table JSON template file #}
 
 "Interface": {
-  {% for intf in interfaces %}
+  {% for intf in ops_interfaces %}
     "{{ intf.name }}": {
       {% if intf.type is defined %}
         "type": "{{ intf.type }}",

@@ -1,7 +1,7 @@
 {# OpenSwitch System.vrfs column JSON template file #}
 
 "vrfs": {
-  {% for vrf in vrfs %}
+  {% for vrf in ops_vrfs %}
     "{{ vrf.name }}": {
 
       {% if vrf.ports is defined %}

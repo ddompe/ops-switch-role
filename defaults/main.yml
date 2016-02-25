@@ -14,7 +14,7 @@ ops_system_hostname: switch
 ops_intf_admin_state: down
 ops_intf_autoneg: default
 ops_intf_duplex: full
-interfaces:
+ops_interfaces:
   - name: 1
   - name: 2
   - name: 3
@@ -68,7 +68,7 @@ interfaces:
 # Port default variables.
 ops_port_tag: 1
 ops_port_vlan_mode: access
-ports:
+ops_ports:
   - name: 1
   - name: 2
   - name: 3

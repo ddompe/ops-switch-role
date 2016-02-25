@@ -1,7 +1,7 @@
 {# OpenSwitch System.bridges column JSON template file #}
 
 "bridges": {
-  {% for br in bridges %}
+  {% for br in ops_bridges %}
     "{{ br.name }}": {
       {% if br.ports is defined %}
         "ports": [ {% for port in br.ports %}
