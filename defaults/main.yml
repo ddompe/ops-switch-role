@@ -1,6 +1,9 @@
 ---
 # defaults file for switch
 
+# default ssh user on the switch
+ansible_ssh_user: admin
+
 # Global variables.
 ops_debug: false
 
