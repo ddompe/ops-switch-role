@@ -1,11 +1,29 @@
+# Based on the deprecated ansible docker image:
+#
+# https://hub.docker.com/r/ansible/ubuntu14.04-ansible/
+#
+# especially, this Dockerfile:
+#
+# https://github.com/ansible/ansible-docker-base/blob/master/devel-ubuntu14.04/Dockerfile
+#
 FROM ubuntu:14.04
-RUN apt-get update
 
-# Install Ansible-devel from github.com:ansible/ansible
-RUN apt-get install -y software-properties-common git make python python-pip
-RUN pip install setuptools
-RUN git clone https://github.com/ansible/ansible.git --recursive
-RUN cd ansible && make && make install
+MAINTAINER Kei Nohguchi <kei@nohguchi.com>
 
-# Install Ansible inventory file
-RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
+# Required package(s)
+RUN apt-get -y update && \
+    apt-get install -y python-yaml python-jinja2 python-httplib2 \
+                       python-keyczar python-paramiko python-setuptools \
+                       python-pkg-resources git python-pip
+
+# Prepare the ansible environment
+RUN mkdir /etc/ansible
+RUN echo '[local]\nlocalhost\n' > /etc/ansible/hosts
+RUN mkdir /opt/ansible
+
+# Get the latest ansible
+RUN git clone https://github.com/ansible/ansible.git --recursive /opt/ansible/ansible
+WORKDIR /opt/ansible/ansible
+ENV PATH /opt/ansible/ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin
+ENV PYTHONPATH /opt/ansible/ansible/lib
+ENV ANSIBLE_LIBRARY /opt/ansible/ansible/library
