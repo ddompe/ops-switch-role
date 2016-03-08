@@ -34,10 +34,10 @@ script:
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup --name "${switch_name}" -h "${switch_name}" ops:local /sbin/init > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup ops:local /sbin/init > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
-  - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
+  - 'sudo docker run --detach --link "$(cat ${switch_id})":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
 
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
