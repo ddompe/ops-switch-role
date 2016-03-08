@@ -51,7 +51,7 @@ script:
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
 
   # Change the ownership of the .ssh directory
-  - 'sudo docker exec --tty "$(cat ${switch_id})" chown -R "${switch_user}:${switch_group}" "/home/${siwtch_user}/.ssh"'
+  - 'sudo docker exec --tty "$(cat ${switch_id})" chown -R "${switch_user}:${switch_group}" "/home/${switch_user}/.ssh"'
 
   # Switch reachability check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" "${switch_name}"'
