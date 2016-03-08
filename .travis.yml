@@ -38,7 +38,7 @@ script:
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:dut "${switch_init}" > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:dut "${switch_init}" > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
@@ -55,6 +55,9 @@ script:
 
   # IP reachability
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ping -c 3 "${switch_name}"'
+
+  # SSH reachability
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ssh admin@"${switch_name}" ls'
 
   # Run the test
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" /etc/ansible/roles/${role_under_test}/tests/test.yml'
