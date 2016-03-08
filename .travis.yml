@@ -6,7 +6,7 @@ sudo: required
 
 env:
   - role_under_test: switch
-  - distribution: ubuntu
+    distribution: ubuntu
     version: 14.04
     init: /sbin/init
     run_ops: ""
