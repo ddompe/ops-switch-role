@@ -22,7 +22,7 @@ ADD inventory /etc/ansible/hosts
 
 # Copy the ssh private key
 RUN mkdir /root/.ssh
-ADD id_rsa /root/.ssh/id_rsa
+ADD .ssh/id_rsa /root/.ssh/id_rsa
 RUN chmod 0700 /root/.ssh
 RUN chmod 0400 /root/.ssh/id_rsa
 
