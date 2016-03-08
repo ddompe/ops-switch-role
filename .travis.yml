@@ -57,7 +57,7 @@ script:
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ping -c 3 "${switch_name}"'
 
   # SSH reachability
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ssh admin@"${switch_name}" ls'
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" "${switch_name}"'
 
   # Run the test
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" /etc/ansible/roles/${role_under_test}/tests/test.yml'
