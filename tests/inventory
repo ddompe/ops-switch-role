@@ -1,8 +1,2 @@
 [local]
 localhost
-
-[switch:vars]
-ansible_ssh_host=localhost
-
-[switch]
-ops1 ansible_ssh_port=10022
