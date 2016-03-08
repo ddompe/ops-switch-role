@@ -24,9 +24,6 @@ services:
   - docker
 
 before_install:
-  # Install the latest docker
-  - 'curl -sSL https://get.docker.com | sudo sh'
-
   # OpenSwitch container
   - 'sudo docker pull ${switch_image}:${switch_version}'
 
