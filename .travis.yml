@@ -25,21 +25,21 @@ services:
 before_install:
   # OpenSwitch container
   - 'sudo docker pull ${switch_image}:${switch_version}'
-  - 'sudo docker build --rm=true --file=tests/Dockerfile.openswitch --tag=ops:dut tests'
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.openswitch --tag=ops:local tests'
 
   # Ansible control machine container
   - 'sudo docker pull ${distribution}:${version}'
-  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:local tests'
 
 script:
   - switch_id=$(mktemp)
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:dut /sbin/init > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:local /sbin/init > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
-  - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
+  - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
 
   # Add switch entry to the inventory file
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=${switch_name} ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
