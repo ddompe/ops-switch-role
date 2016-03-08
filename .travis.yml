@@ -44,9 +44,6 @@ script:
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/"${test_filename}" --syntax-check'
 
-  # SSH reachability
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" switch'
-
   # Run the test
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" -u "${switch_user}" /etc/ansible/roles/${role_under_test}/tests/"${test_filename}"'
 
