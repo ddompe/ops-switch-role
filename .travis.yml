@@ -6,12 +6,13 @@ sudo: required
 
 env:
   - switch_image: keinohguchi/openswitch
-    switch_version: 20160205050024
+    switch_version: 20160307221827
     switch_ssh_port: 22
     switch_init: /sbin/init
+    switch_user: admin
     switch_name: ops1
-    switch_user: root
     role_under_test: switch
+    ansible_ops: "-vvvv"
     distribution: ubuntu
     version: 14.04
     init: /sbin/init
@@ -49,7 +50,7 @@ script:
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
 
   # Switch reachability check
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping -vvv -u "${switch_user}" "${switch_name}"'
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" "${switch_name}"'
 
   # Clenaup
   - 'sudo docker stop "$(cat ${ansible_id})"'
