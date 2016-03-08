@@ -9,8 +9,7 @@ env:
   - switch_image: keinohguchi/openswitch
     switch_version: 20160307221827
     switch_ssh_port: 22
-    switch_group: ops_admin
-    switch_user: admin
+    switch_user: root
     switch_name: ops1
     role_under_test: switch
     ansible_ops: "-vvvv"
@@ -36,7 +35,7 @@ script:
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:local /sbin/init > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup --name "${switch_name}" -h "${switch_name}" ops:local /sbin/init > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
@@ -44,15 +43,11 @@ script:
   # Add switch entry to the inventory file
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=${switch_name} ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
 
-  # Change the ownership of the .ssh directory
-  - 'sudo docker exec --tty "$(cat ${switch_id})" chown -R "${switch_user}:${switch_group}" "/home/${switch_user}/.ssh"'
-  - 'sudo docker exec --tty "$(cat ${switch_id})" chmod 0700 "/home/${switch_user}/.ssh"'
-
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
 
   # SSH reachability
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" switch'
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" switch'
 
   # Run the test
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" /etc/ansible/roles/${role_under_test}/tests/test.yml'
