@@ -47,7 +47,7 @@ script:
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
 
   # Add switch entry in the inventory file
-  - 'echo "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
+  - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
 
   # Switch reachability check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping -u "${switch_user}" "${switch_name}"'
