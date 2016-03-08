@@ -19,6 +19,7 @@ RUN apt-get -y update && \
 # Prepare the ansible environment
 RUN mkdir /etc/ansible
 ADD inventory /etc/ansible/hosts
+ADD ansible.cfg /etc/ansible/ansible.cfg
 
 # Copy the ssh private key
 RUN mkdir /root/.ssh
