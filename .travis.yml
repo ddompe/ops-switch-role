@@ -8,7 +8,6 @@ dist: trusty
 env:
   - switch_image: keinohguchi/openswitch
     switch_version: 20160307221827
-    switch_ssh_port: 22
     switch_user: root
     switch_name: ops1
     role_under_test: switch
@@ -39,9 +38,6 @@ script:
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
-
-  # Add switch entry to the inventory file
-  - 'echo -e "\n[switch]\n${switch_name} ansible_host=${switch_name} ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
 
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
