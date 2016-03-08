@@ -8,6 +8,8 @@ env:
   - switch_image: keinohguchi/openswitch
     switch_version: 20160205050024
     switch_init: /sbin/init
+    switch_ssh_port: 10022
+    switch_name: ops1
     role_under_test: switch
     distribution: ubuntu
     version: 14.04
@@ -30,10 +32,13 @@ script:
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":/home/admin/.ssh -p 10022:22 "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":/home/admin/.ssh -p "${switch_ssh_port}":22 --name "${switch_name}" -h "${switch_name}" "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/${role_under_test}:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
+
+  # Switch reachability check
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${switch_name}"'
 
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
