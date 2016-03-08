@@ -3,6 +3,7 @@
 # https://github.com/geerlingguy/ansible-role-apache/blob/master/.travis.yml
 
 sudo: required
+dist: trusty
 
 env:
   - switch_image: keinohguchi/openswitch
