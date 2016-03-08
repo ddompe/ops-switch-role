@@ -44,7 +44,7 @@ script:
 
   # Get the IP address of the switch
   - 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
-  - 'sudo docker exec "$(cat ${switch_id})" ip addr'
+  - 'sudo docker inspect "$(cat ${switch_id})"'
 
   # Add switch entry to the inventory file
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
