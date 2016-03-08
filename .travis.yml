@@ -1,29 +1,35 @@
 ---
-language: python
-python: "2.7"
+# Following the sample role CI
+# https://github.com/geerlingguy/ansible-role-apache/blob/master/.travis.yml
 
-# Use the new container infrastructure
-sudo: true
+sudo: required
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
+env:
+  - distribution: ubuntu
+    version: 14.04
+    init: /sbin/init
+    run_ops: ""
 
-install:
-  # Install ansible
-  - pip install ansible
+services:
+  - docker
 
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../../' >ansible.cfg
+before_install:
+  # Pull container
+  - 'sudo docker pull ${distribution}:${version}'
+  # Customize container
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - container_id=$(mktemp)
+
+  # Run container in detached state
+  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
+
+  # Ansible syntax check
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check'
+
+  # Clenaup
+  - 'sudo docker stop "$(cat ${container_id})"'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
