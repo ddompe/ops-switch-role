@@ -12,7 +12,7 @@ env:
     distribution: ubuntu
     version: 14.04
     role_under_test: switch
-    switch_user: root
+    switch_user: admin
     ansible_ops: "-vvvv"
   matrix:
     - test_filename: test.yml
