@@ -1,5 +1,7 @@
 # OpenSwitch switch Role
 
+[![Build Status](https://travis-ci.org/keinohguchi/ops-switch-role.svg)](https://travis-ci.org/keinohguchi/ops-switch-role)
+
 ## Overview
 
 OpenSwitch `switch` provides the foundation to configure the layer 2 and 3
