@@ -52,6 +52,7 @@ script:
 
   # Change the ownership of the .ssh directory
   - 'sudo docker exec --tty "$(cat ${switch_id})" chown -R "${switch_user}:${switch_group}" "/home/${switch_user}/.ssh"'
+  - 'sudo docker exec --tty "$(cat ${switch_id})" chmod 0700 "/home/${switch_user}/.ssh"'
 
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
