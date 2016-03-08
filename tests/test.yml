@@ -1,5 +1,5 @@
 ---
-- hosts: switch
-  remote_user: root
+- name: Noop playbook
+  hosts: switch
   roles:
     - switch

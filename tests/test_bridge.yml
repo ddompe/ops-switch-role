@@ -1,7 +1,6 @@
 ---
 - name: simple bridge with all L2 ports
   hosts: switch
-  remote_user: root
   gather_facts: yes
   roles:
     - role: switch
