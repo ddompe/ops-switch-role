@@ -26,6 +26,8 @@ services:
 before_install:
   # OpenSwitch container
   - 'sudo docker pull ${switch_image}:${switch_version}'
+  - 'sudo docker build --rm=true --file=tests/Dockerfile.openswitch --tag=ops:dut tests'
+
 
   # Ansible control machine container
   - 'sudo docker pull ${distribution}:${version}'
@@ -36,7 +38,7 @@ script:
   - ansible_id=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -P -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
+  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" ops:dut "${switch_init}" > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --link "${switch_name}":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'

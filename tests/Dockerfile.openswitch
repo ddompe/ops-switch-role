@@ -1,0 +1,6 @@
+FROM keinohguchi/openswitch:20160307221827
+
+MAINTAINER Kei Nohguchi <kei@nohguchi.com>
+
+# Ports to be exposed for the Ansible control machine reachability
+EXPOSE 22
