@@ -19,7 +19,7 @@ RUN apt-get -y update && \
 # Prepare the ansible environment
 RUN mkdir /etc/ansible
 RUN echo '[local]\nlocalhost\n' > /etc/ansible/hosts
-ADD tests/.ssh/id_rsa /root/.ssh/id_rsa
+ADD "${PWD}/tests/.ssh/id_rsa" /root/.ssh/id_rsa
 
 # Get the latest ansible
 RUN mkdir /opt/ansible
