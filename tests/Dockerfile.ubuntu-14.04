@@ -2,9 +2,7 @@ FROM ubuntu:14.04
 RUN apt-get update
 
 # Install Ansible-devel from github.com:ansible/ansible
-RUN apt-get install -y software-properties-common git
-RUN apt-get install -y make
-RUN apt-get install -y python pip
+RUN apt-get install -y software-properties-common git make python python-pip
 RUN pip install setuptools
 RUN git clone https://github.com/ansible/ansible.git --recursive
 RUN cd ansible && make && make install
