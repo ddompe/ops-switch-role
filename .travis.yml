@@ -6,7 +6,8 @@ sudo: required
 dist: trusty
 
 env:
-  - switch_image: keinohguchi/openswitch
+  - test_filename: test.yml
+    switch_image: keinohguchi/openswitch
     switch_version: 20160307221827
     switch_user: root
     switch_name: ops1
@@ -40,13 +41,13 @@ script:
   - 'sudo docker run --detach --link "$(cat ${switch_id})":"${switch_name}" --volume="${PWD}":/etc/ansible/roles/${role_under_test}:rw ${run_ops} ${distribution}-${version}:local "${init}" > "${ansible_id}"'
 
   # Ansible syntax check
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/"${test_filename}" --syntax-check'
 
   # SSH reachability
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" switch'
 
   # Run the test
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" /etc/ansible/roles/${role_under_test}/tests/test.yml'
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook "${ansible_ops}" /etc/ansible/roles/${role_under_test}/tests/"${test_filename}"'
 
   # Clenaup
   - 'sudo docker stop "$(cat ${ansible_id})"'
