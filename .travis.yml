@@ -9,6 +9,7 @@ env:
     switch_version: 20160307221827
     switch_ssh_port: 22
     switch_init: /sbin/init
+    switch_group: ops_admin
     switch_user: admin
     switch_name: ops1
     role_under_test: switch
@@ -37,17 +38,20 @@ script:
   # Run OpenSwitch container in privileged and detached state
   - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
 
-  # Get the IP address of the switch
-  - 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
-
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/${role_under_test}:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
 
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
 
+  # Get the IP address of the switch
+  - 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
+
   # Add switch entry to the inventory file
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
+
+  # Change the ownership of the .ssh directory
+  - 'sudo docker exec --tty "$(cat ${switch_id})" chown -R "${switch_user}:${switch_group}" "/home/${siwtch_user}/.ssh"'
 
   # Switch reachability check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" "${switch_name}"'
