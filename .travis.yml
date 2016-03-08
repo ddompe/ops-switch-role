@@ -5,7 +5,8 @@
 sudo: required
 
 env:
-  - switch_image: 'openswitch/genericx86-64'
+  - switch_image: keinohguchi/openswitch
+    switch_version: 20160205050024
     switch_init: /sbin/init
     role_under_test: switch
     distribution: ubuntu
@@ -18,7 +19,7 @@ services:
 
 before_install:
   # OpenSwitch container
-  - 'sudo docker pull ${switch_image}'
+  - 'sudo docker pull ${switch_image}:${switch_version}'
 
   # Ansible control machine container
   - 'sudo docker pull ${distribution}:${version}'
@@ -28,8 +29,8 @@ script:
   - switch_id=$(mktemp)
   - ansible_id=$(mktemp)
 
-  # Run OpenSwitch container
-  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":/home/admin/.ssh -p 10022:22 "${switch_image}" "${switch_init}" > "${switch_id}"'
+  # Run OpenSwitch container in privileged and detached state
+  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":/home/admin/.ssh -p 10022:22 "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/${role_under_test}:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
