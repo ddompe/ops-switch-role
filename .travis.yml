@@ -24,6 +24,9 @@ services:
   - docker
 
 before_install:
+  # Install the latest docker
+  - 'curl -sSL https://get.docker.com | sudo sh'
+
   # OpenSwitch container
   - 'sudo docker pull ${switch_image}:${switch_version}'
 
@@ -44,8 +47,9 @@ script:
 
   # Get the IP address of the switch
   # Travis is still with docker 1.8.4, which doesn't have a networking support.
-  - 'sudo docker inspect --format="{{.NetworkSettings.IPAddress}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
-  #- 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
+  #- 'sudo docker inspect --format="{{.NetworkSettings.IPAddress}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
+  - 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
+  - 'sudo docker inspect network'
 
   # Add switch entry to the inventory file
   - 'echo -e "\n[switch]\n${switch_name} ansible_host=$(cat ${switch_ssh_ip}) ansible_port=${switch_ssh_port}\n" | sudo docker exec -i "$(cat ${ansible_id})" sh -c "cat >> /etc/ansible/hosts"'
