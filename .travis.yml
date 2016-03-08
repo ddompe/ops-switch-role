@@ -56,8 +56,8 @@ script:
   # Ansible syntax check
   - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
 
-  # Switch reachability check
-  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible -m ping "${ansible_ops}" -u "${switch_user}" "${switch_name}"'
+  # Run the test
+  - 'sudo docker exec --tty "$(cat ${ansible_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${role_under_test}/tests/test.yml --syntax-check'
 
   # Clenaup
   - 'sudo docker stop "$(cat ${ansible_id})"'

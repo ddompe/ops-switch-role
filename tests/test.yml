@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: switch
+  remote_user: admin
   roles:
     - switch
