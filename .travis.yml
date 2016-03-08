@@ -36,13 +36,10 @@ script:
   - switch_ssh_ip=$(mktemp)
 
   # Run OpenSwitch container in privileged and detached state
-  - 'sudo docker run --privileged --detach -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
+  - 'sudo docker run --privileged --detach --net=bridge -v /tmp:/tmp -v /dev/log:/dev/log -v /sys/fs/cgroup:/sys/fs/cgroup -v "${PWD}/tests/.ssh":"/home/${switch_user}/.ssh" --name "${switch_name}" -h "${switch_name}" "${switch_image}:${switch_version}" "${switch_init}" > "${switch_id}"'
 
   # Run Ansible control machine container in detached state
-  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/${role_under_test}:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
-
-  # Let's inspect docker default network
-  - 'sudo docker network inspect bridge'
+  - 'sudo docker run --detach --net=bridge --volume="${PWD}":/etc/ansible/roles/${role_under_test}:ro ${run_ops} ${distribution}-${version}:ansible "${init}" > "${ansible_id}"'
 
   # Get the IP address of the switch
   - 'sudo docker inspect --format="{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" "$(cat ${switch_id})" > "${switch_ssh_ip}"'
