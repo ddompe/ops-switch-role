@@ -9,14 +9,15 @@ env:
   global:
     switch_image: keinohguchi/openswitch
     switch_version: 20160307221827
-    switch_user: root
-    role_under_test: switch
-    ansible_ops: "-vvvv"
     distribution: ubuntu
     version: 14.04
+    role_under_test: switch
+    switch_user: root
+    ansible_ops: "-vvvv"
   matrix:
     - test_filename: test.yml
     - test_filename: test_bridge.yml
+    - test_filename: test_switch.yml
 
 services:
   - docker
