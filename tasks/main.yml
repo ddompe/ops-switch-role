@@ -7,7 +7,7 @@
 - name: configure the switch
   become: yes
   ops_template:
-    src: main.j2
+    src: template/main.j2
   when: ops_bridges is defined or ops_vrfs is defined
   register: ops_result
 
