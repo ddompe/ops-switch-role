@@ -2,20 +2,20 @@
 
 {
   {% if ops_interfaces is defined %}
-    {% include ['ops_intf.j2', 'roles/switch/templates/ops_intf.j2'] %},
+    {% include ['ops_intf.j2'] %},
   {% endif %}
 
   {% if ops_ports is defined %}
-    {% include ['ops_port.j2', 'roles/switch/templates/ops_port.j2'] %},
+    {% include ['ops_port.j2'] %},
   {% endif %}
 
   {% if ops_bridges is defined %}
-    {% include ['ops_bridge.j2', 'roles/switch/templates/ops_bridge.j2'] %},
+    {% include ['ops_bridge.j2'] %},
   {% endif %}
 
   {% if ops_vrfs is defined %}
-    {% include ['ops_vrf.j2', 'roles/switch/templates/ops_vrf.j2'] %},
+    {% include ['ops_vrf.j2'] %},
   {% endif %}
 
-  {% include ['ops_system.j2', 'roles/switch/templates/ops_system.j2'] %}
+  {% include ['ops_system.j2'] %}
 }
