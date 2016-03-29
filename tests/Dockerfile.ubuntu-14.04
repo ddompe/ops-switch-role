@@ -14,8 +14,12 @@ MAINTAINER Kei Nohguchi <kei@nohguchi.com>
 RUN apt-get -y update && \
     apt-get install -y openssh-client git \
                        python-yaml python-jinja2 python-httplib2 \
-                       python-keyczar python-paramiko python-setuptools \
+                       python-keyczar python-setuptools \
                        python-pkg-resources python-pip
+
+# Update the paramiko to avoid the following key exchange issue
+# SSHException: Incompatible ssh peer (no acceptable kex algorithm)
+RUN easy_install paramiko
 
 # Prepare the ansible environment
 RUN mkdir /etc/ansible
