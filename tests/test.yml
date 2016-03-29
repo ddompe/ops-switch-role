@@ -1,5 +1,31 @@
 ---
-- name: Noop playbook
+- name: noop playbook
   hosts: switch
   roles:
     - switch
+
+- name: show version
+  hosts: switch
+  vars:
+    ansible_user: admin
+    ops_debug: yes
+    cli:
+      username: "{{ ops_username }}"
+      password: "{{ ops_password }}"
+      host: "{{ ansible_host }}"
+      port: "{{ ansible_port }}"
+  tasks:
+    - name: show version CLI
+      ops_command:
+        commands:
+          - show version
+        provider: "{{ cli }}"
+        waitfor:
+          - "result[0] contains OpenSwitch"
+        interval: 1
+        retries: 2
+      register: result
+      connection: local
+    - name: debug the result
+      debug: var=result
+      when: ops_debug
