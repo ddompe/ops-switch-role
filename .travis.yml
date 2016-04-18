@@ -7,8 +7,6 @@ dist: trusty
 
 env:
   global:
-    switch_image: keinohguchi/openswitch
-    switch_version: 20160307221827
     distribution: ubuntu
     version: 14.04
     role_under_test: switch
@@ -25,8 +23,7 @@ services:
 
 before_install:
   # OpenSwitch container
-  - 'sudo docker pull ${switch_image}:${switch_version}'
-  - 'sudo docker build --rm=true --file=tests/Dockerfile.openswitch --tag=ops:local tests'
+  - 'sudo docker build --pull=true --rm=true --file=tests/Dockerfile.openswitch --tag=ops:local tests'
 
   # Ansible control machine container
   - 'sudo docker pull ${distribution}:${version}'
