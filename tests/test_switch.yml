@@ -31,10 +31,6 @@
       ops_command:
         commands:
           - show hostname
-          - show interface 1 brief
-          - show interface 2 brief
-          - show interface 3 brief
-          - show interface 4 brief
           - show interface 45 brief
           - show interface 46 brief
           - show interface 47 brief
@@ -42,14 +38,10 @@
         provider: "{{ cli }}"
         waitfor:
           - "result[0] contains 'switch'"
-          - "result[1] contains 'access'"
-          - "result[2] contains 'access'"
-          - "result[3] contains 'access'"
-          - "result[4] contains 'access'"
-          - "result[5] contains 'routed'"
-          - "result[6] contains 'routed'"
-          - "result[7] contains 'routed'"
-          - "result[8] contains 'routed'"
+          - "result[1] contains 'routed'"
+          - "result[2] contains 'routed'"
+          - "result[3] contains 'routed'"
+          - "result[4] contains 'routed'"
         interval: 1
         retries: 2
       register: result
