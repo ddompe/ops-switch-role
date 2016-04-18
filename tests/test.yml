@@ -1,14 +1,14 @@
 ---
-- name: noop switch role play
+- name: noop to switch role to check the minimal interaction with OpenSwitch
   hosts: switch
   roles:
     - switch
 
-- name: show version
+- name: check if switch does respond to 'show version' CLI
   hosts: switch
   vars:
     ansible_user: admin
-    ops_debug: yes
+    ops_debug: no
     cli:
       username: "{{ ops_username }}"
       password: "{{ ops_password }}"
