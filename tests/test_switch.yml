@@ -27,13 +27,13 @@
           ports: [45, 46, 47, 48]
 
   post_tasks:
-    - name: Check L3 ports are shown in VRF
+    - name: Check if port 45 is L3 port
       ops_command:
         commands:
-          - show vrf
+          - show interface 45
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains '45'"
+          - "result[0] contains 'L3'"
         interval: 1
         retries: 2
       register: result
