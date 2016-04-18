@@ -8,7 +8,6 @@
   become: yes
   ops_template:
     src: main.j2
-  when: ops_bridges is defined or ops_vrfs is defined
   register: ops_result
 
 - name: result from the switch
