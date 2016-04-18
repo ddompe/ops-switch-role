@@ -13,7 +13,7 @@ env:
     version: 14.04
     role_under_test: switch
     switch_user: admin
-    ansible_ops: -vvv
+    ansible_ops: -v
   matrix:
     - test_filename: test.yml
     - test_filename: test_hostname.yml
