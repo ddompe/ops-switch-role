@@ -27,17 +27,29 @@
           ports: [45, 46, 47, 48]
 
   post_tasks:
-    - name: Check if ports are L3 ports
+    - name: Check if ports are correctly L2 and L3 ports
       ops_command:
         commands:
           - show hostname
-          - show interafce 45 brief
-          - show interafce 46 brief
+          - show interface 41 brief
+          - show interface 42 brief
+          - show interface 43 brief
+          - show interface 44 brief
+          - show interface 45 brief
+          - show interface 46 brief
+          - show interface 47 brief
+          - show interface 48 brief
         provider: "{{ cli }}"
         waitfor:
           - "result[0] contains 'switch'"
-          - "result[1] contains 'routed'"
-          - "result[2] contains 'routed'"
+          - "result[1] contains 'access'"
+          - "result[2] contains 'access'"
+          - "result[3] contains 'access'"
+          - "result[4] contains 'access'"
+          - "result[5] contains 'routed'"
+          - "result[6] contains 'routed'"
+          - "result[7] contains 'routed'"
+          - "result[8] contains 'routed'"
         interval: 1
         retries: 2
       register: result
