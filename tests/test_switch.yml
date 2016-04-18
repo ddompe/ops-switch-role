@@ -25,24 +25,6 @@
       host: "{{ ansible_host }}"
       port: "{{ ansible_port }}"
   tasks:
-    - name: show vlan CLI
-      ops_command:
-        commands:
-          - show vlan 1
-        provider: "{{ cli }}"
-        waitfor:
-          - "result[0] contains 41"
-          - "result[0] contains 42"
-          - "result[0] contains 43"
-          - "result[0] contains 44"
-        interval: 1
-        retries: 2
-      register: result
-      connection: local
-    - name: debug the result
-      debug: var=result
-      when: ops_debug
-
     - name: show vrf CLI
       ops_command:
         commands:
