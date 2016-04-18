@@ -14,7 +14,6 @@
   roles:
     - role: switch
       ops_system_hostname: simple_hostname
-      ops_debug: no
 
   post_tasks:
     - name: check the hostname on the switch
