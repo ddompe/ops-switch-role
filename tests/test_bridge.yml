@@ -24,13 +24,17 @@
                   41, 42, 43, 44, 45, 46, 47, 48]
 
   post_tasks:
-    - name: check if port 1 is L2 port
+    - name: check if ports are L2 access ports
       ops_command:
         commands:
+          - show hostname
           - show interface 1 brief
+          - show interface 2 brief
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains 'access'"
+          - "result[0] contains 'bridge'"
+          - "result[1] contains 'access'"
+          - "result[2] contains 'access'"
         interval: 1
         retries: 2
       register: result
