@@ -21,10 +21,10 @@
     - name: show hostname CLI
       ops_command:
         commands:
-          - show hostname
+          - show running-config
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains 'OpenSwitch'"
+          - "result[0] contains 'hostname OpenSwitch'"
         interval: 1
         retries: 2
       register: result
