@@ -27,13 +27,13 @@
           ports: [45, 46, 47, 48]
 
   post_tasks:
-    - name: show version CLI
+    - name: Check L3 ports are shown in VRF
       ops_command:
         commands:
-          - show version
+          - show vrf
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains OpenSwitch"
+          - "result[0] contains '45'"
         interval: 1
         retries: 2
       register: result
