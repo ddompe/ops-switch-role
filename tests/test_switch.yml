@@ -9,11 +9,54 @@
       ops_debug: no
       ops_bridges:
         - name: bridge_normal
-          ports: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                  11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                  21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-                  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-                  41, 42, 43, 44]
+          ports: [41, 42, 43, 44]
       ops_vrfs:
         - name: vrf_default
           ports: [45, 46, 47, 48]
+
+- name: show version
+  hosts: switch
+  vars:
+    ansible_user: admin
+    ops_debug: yes
+    cli:
+      username: "{{ ops_username }}"
+      password: "{{ ops_password }}"
+      host: "{{ ansible_host }}"
+      port: "{{ ansible_port }}"
+  tasks:
+    - name: show vlan CLI
+      ops_command:
+        commands:
+          - show vlan 1
+        provider: "{{ cli }}"
+        waitfor:
+          - "result[0] contains 41"
+          - "result[0] contains 42"
+          - "result[0] contains 43"
+          - "result[0] contains 44"
+        interval: 1
+        retries: 2
+      register: result
+      connection: local
+    - name: debug the result
+      debug: var=result
+      when: ops_debug
+
+    - name: show vrf CLI
+      ops_command:
+        commands:
+          - show vrf
+        provider: "{{ cli }}"
+        waitfor:
+          - "result[0] contains 45"
+          - "result[0] contains 46"
+          - "result[0] contains 47"
+          - "result[0] contains 48"
+        interval: 1
+        retries: 2
+      register: result
+      connection: local
+    - name: debug the result
+      debug: var=result
+      when: ops_debug
