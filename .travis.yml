@@ -16,6 +16,7 @@ env:
     ansible_ops: -vvvv
   matrix:
     - test_filename: test.yml
+    - test_filename: test_hostname.yml
     - test_filename: test_bridge.yml
     - test_filename: test_switch.yml
 
