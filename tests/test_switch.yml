@@ -25,16 +25,13 @@
       host: "{{ ansible_host }}"
       port: "{{ ansible_port }}"
   tasks:
-    - name: show vrf CLI
+    - name: show version CLI
       ops_command:
         commands:
-          - show vrf
+          - show version
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains 45"
-          - "result[0] contains 46"
-          - "result[0] contains 47"
-          - "result[0] contains 48"
+          - "result[0] contains OpenSwitch"
         interval: 1
         retries: 2
       register: result
