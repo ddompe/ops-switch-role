@@ -50,8 +50,8 @@
           - "result[6] contains 'routed'"
           - "result[7] contains 'routed'"
           - "result[8] contains 'routed'"
-        interval: 1
-        retries: 2
+        interval: 5
+        retries: 5
       register: result
       connection: local
     - name: debug the result
