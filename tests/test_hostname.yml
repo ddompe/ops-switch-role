@@ -2,13 +2,6 @@
 - name: configure the hostname through switch role
   hosts: switch
   gather_facts: no
-  roles:
-    - role: switch
-      ops_system_hostname: simple_hostname
-      ops_debug: no
-
-- name: check the hostname on the switch
-  hosts: switch
   vars:
     ansible_user: admin
     ops_debug: no
@@ -17,8 +10,14 @@
       password: "{{ ops_password }}"
       host: "{{ ansible_host }}"
       port: "{{ ansible_port }}"
-  tasks:
-    - name: show hostname CLI
+
+  roles:
+    - {role: switch
+       ops_system_hostname: simple_hostname
+       ops_debug: no }
+
+  post_tasks:
+    - name: check the hostname on the switch
       ops_command:
         commands:
           - show hostname
