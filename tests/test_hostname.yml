@@ -24,7 +24,7 @@
           - show hostname
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains 'simple_hostname'"
+          - "result[0] contains simple_hostname"
         interval: 1
         retries: 2
       register: result
