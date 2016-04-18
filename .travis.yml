@@ -15,7 +15,7 @@ env:
     switch_user: admin
     ansible_ops: -v
   matrix:
-    - test_filename: test.yml
+    - test_filename: test_version.yml
     - test_filename: test_hostname.yml
     - test_filename: test_bridge.yml
     - test_filename: test_switch.yml
