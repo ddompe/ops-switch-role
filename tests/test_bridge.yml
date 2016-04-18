@@ -30,11 +30,23 @@
           - show hostname
           - show interface 1 brief
           - show interface 2 brief
+          - show interface 3 brief
+          - show interface 4 brief
+          - show interface 45 brief
+          - show interface 46 brief
+          - show interface 47 brief
+          - show interface 48 brief
         provider: "{{ cli }}"
         waitfor:
           - "result[0] contains 'bridge'"
           - "result[1] contains 'access'"
           - "result[2] contains 'access'"
+          - "result[3] contains 'access'"
+          - "result[4] contains 'access'"
+          - "result[5] contains 'access'"
+          - "result[6] contains 'access'"
+          - "result[7] contains 'access'"
+          - "result[8] contains 'access'"
         interval: 1
         retries: 2
       register: result
