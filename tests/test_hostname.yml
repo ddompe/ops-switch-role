@@ -4,7 +4,7 @@
   gather_facts: no
   roles:
     - role: switch
-      ops_system_hostname: OpenSwitch
+      ops_system_hostname: simple_hostname
       ops_debug: no
 
 - name: check the hostname on the switch
@@ -21,10 +21,10 @@
     - name: show hostname CLI
       ops_command:
         commands:
-          - show running-config
+          - show hostname
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains 'hostname OpenSwitch'"
+          - "result[0] contains 'simple_hostname'"
         interval: 1
         retries: 2
       register: result
