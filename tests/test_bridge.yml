@@ -1,7 +1,7 @@
 ---
 - name: simple bridge with all L2 ports
   hosts: switch
-  gather_facts: yes
+  gather_facts: no
   roles:
     - role: switch
       ops_system_hostname: bridge
@@ -19,7 +19,7 @@
   hosts: switch
   vars:
     ansible_user: admin
-    ops_debug: yes
+    ops_debug: no
     cli:
       username: "{{ ops_username }}"
       password: "{{ ops_password }}"

@@ -9,6 +9,7 @@
       password: "{{ ops_password }}"
       host: "{{ ansible_host }}"
       port: "{{ ansible_port }}"
+
   roles:
     - switch
 
