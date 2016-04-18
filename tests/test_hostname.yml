@@ -4,10 +4,10 @@
   gather_facts: no
   roles:
     - role: switch
-      ops_system_hostname: simple_hostname
+      ops_system_hostname: OpenSwitch
       ops_debug: no
 
-- name: check the hostname is correctly configured on the switch
+- name: check the hostname on the switch
   hosts: switch
   vars:
     ansible_user: admin
@@ -24,7 +24,7 @@
           - show hostname
         provider: "{{ cli }}"
         waitfor:
-          - "result[0] contains simple_hostname"
+          - "result[0] contains 'OpenSwitch'"
         interval: 1
         retries: 2
       register: result
