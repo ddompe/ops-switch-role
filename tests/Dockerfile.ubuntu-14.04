@@ -34,15 +34,14 @@ RUN chmod 0400 /root/.ssh/id_rsa
 
 # Get the latest ansible
 RUN mkdir /opt/ansible
-# Waiting ansible PR #1513 and ansible-modules-core PR 3313:
+# Waiting ansible PR #1513
 # https://github.com/ansible/ansible/pull/1513
-# https://github.com/ansible/ansible-modules-core/pull/3313
 #RUN git clone https://github.com/ansible/ansible.git \
 #        --recursive /opt/ansible/ansible
 RUN git clone https://github.com/keinohguchi/ansible.git \
         --branch net_template_fix /opt/ansible/ansible
-RUN git clone https://github.com/keinohguchi/ansible-modules-core.git \
-	--branch ops_template_json /opt/ansible/ansible/lib/ansible/modules/core
+RUN git clone https://github.com/ansible/ansible-modules-core.git \
+	/opt/ansible/ansible/lib/ansible/modules/core
 WORKDIR /opt/ansible/ansible
 ENV PATH /opt/ansible/ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin
 ENV PYTHONPATH /opt/ansible/ansible/lib
