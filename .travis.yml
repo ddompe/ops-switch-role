@@ -21,6 +21,7 @@ env:
     init: /sbin/init
     run_ops: ""
   matrix:
+    # Basic sanity check on both on Ubuntu14.04 and CentOS7 machines.
     - test_filename: test_version.yml
     - test_filename: test_version.yml
       distribution: centos
@@ -28,6 +29,13 @@ env:
       init: /usr/lib/systemd/systemd
       run_ops: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     - test_filename: test_hostname.yml
+    - test_filename: test_hostname.yml
+      distribution: centos
+      version: 7
+      init: /usr/lib/systemd/systemd
+      run_ops: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    # We only use the ubuntu as the control machine
+    # rest of the tests.
     - test_filename: test_bridge.yml
     - test_filename: test_switch.yml
 
