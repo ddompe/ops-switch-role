@@ -33,6 +33,7 @@ RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 # Update the paramiko to avoid the following key exchange issue
 # SSHException: Incompatible ssh peer (no acceptable kex algorithm)
+RUN yum groupinstall "Development tools"
 RUN easy_install paramiko
 
 # Prepare the ansible environment
