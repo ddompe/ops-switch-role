@@ -35,8 +35,7 @@ VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]
 
 # Required package(s)
-RUN apt-get -y update && \
-    apt-get install -y openssh-client git \
+RUN yum -y install openssh-client git \
                        python-yaml python-jinja2 python-httplib2 \
                        python-keyczar python-setuptools \
                        python-pkg-resources python-pip
