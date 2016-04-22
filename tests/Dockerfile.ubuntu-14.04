@@ -39,7 +39,7 @@ RUN mkdir /opt/ansible
 #RUN git clone https://github.com/ansible/ansible.git \
 #        --recursive /opt/ansible/ansible
 RUN git clone https://github.com/keinohguchi/ansible.git \
-        --branch devel /opt/ansible/ansible
+        --branch net_template_fix /opt/ansible/ansible
 RUN git clone https://github.com/ansible/ansible-modules-core.git \
 	/opt/ansible/ansible/lib/ansible/modules/core
 WORKDIR /opt/ansible/ansible
