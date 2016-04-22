@@ -22,23 +22,15 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-# Install Ansible
-# RUN yum -y install epel-release
-# RUN yum -y install git ansible sudo
-# RUN yum clean all
-#
-# Disable requiretty
-RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
-
-#
-VOLUME ["/sys/fs/cgroup"]
-CMD ["/usr/sbin/init"]
-
 # Required package(s)
-RUN yum -y install openssh-client git \
+RUN yum -y install openssh-client epel-release git sudo \
                        python-yaml python-jinja2 python-httplib2 \
                        python-keyczar python-setuptools \
                        python-pkg-resources python-pip
+RUN yum clean all
+
+# Disable requiretty
+RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 # Update the paramiko to avoid the following key exchange issue
 # SSHException: Incompatible ssh peer (no acceptable kex algorithm)
@@ -69,3 +61,7 @@ WORKDIR /opt/ansible/ansible
 ENV PATH /opt/ansible/ansible/bin:/bin:/usr/bin:/sbin:/usr/sbin
 ENV PYTHONPATH /opt/ansible/ansible/lib
 ENV ANSIBLE_LIBRARY /opt/ansible/ansible/library
+
+#
+#VOLUME ["/sys/fs/cgroup"]
+#CMD ["/usr/sbin/init"]
