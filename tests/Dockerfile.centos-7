@@ -23,7 +23,7 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Ansible required package(s)
-#RUN yum -y groupinstall "Development tools"
+RUN yum -y groupinstall "Development tools"
 RUN yum -y install openssl-devel epel-release git sudo \
                        python-devel python-setuptools
 RUN yum clean all
