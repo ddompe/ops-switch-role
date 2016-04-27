@@ -1,6 +1,6 @@
 ---
 - name: simple bridge with all L2 ports
-  hosts: switch
+  hosts: test_switch
   gather_facts: no
   vars:
     ansible_user: admin

@@ -1,6 +1,6 @@
 ---
 - name: simple switch with four L3 interfaces and remaining L2 ports
-  hosts: switch
+  hosts: test_switch
   gather_facts: yes
   vars:
     ansible_user: admin
