@@ -18,8 +18,6 @@ RUN chmod 0400 /root/.ssh/id_rsa
 
 # Prepare the ansible environment
 RUN mkdir /etc/ansible
-ADD inventory /etc/ansible/hosts
-ADD ansible.cfg /etc/ansible/ansible.cfg
 
 # Required package(s)
 RUN apt-get -y update && \

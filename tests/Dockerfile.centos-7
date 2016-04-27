@@ -18,8 +18,6 @@ RUN chmod 0400 /root/.ssh/id_rsa
 
 # Prepare the ansible environment
 RUN mkdir /etc/ansible
-ADD inventory /etc/ansible/hosts
-ADD ansible.cfg /etc/ansible/ansible.cfg
 
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
