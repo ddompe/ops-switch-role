@@ -25,6 +25,15 @@
       ops_vrfs:
         - name: vrf_default
           ports: [45, 46, 47, 48]
+      ops_ports:
+        - name: 1
+          ipv4_address: 172.16.1.1/24
+        - name: 2
+          ipv4_address: 172.16.2.1/24
+        - name: 3
+          ipv4_address: 172.16.3.1/24
+        - name: 4
+          ipv4_address: 172.16.4.1/24
 
   post_tasks:
     - name: Check if ports are correctly L3 ports
