@@ -1,9 +1,9 @@
 [local]
 localhost
 
-[test_switch:vars]
+[switches@travis:vars]
 ops_username=netop
 ops_password=netop
 
-[test_switch]
+[switches@travis]
 ops ansible_host=ops ansible_port=22
