@@ -10,6 +10,17 @@ FROM centos:7
 
 MAINTAINER Kei Nohguchi <kei@nohguchi.com>
 
+# Copy the ssh private key
+RUN mkdir /root/.ssh
+ADD id_rsa /root/.ssh/id_rsa
+RUN chmod 0700 /root/.ssh
+RUN chmod 0400 /root/.ssh/id_rsa
+
+# Prepare the ansible environment
+RUN mkdir /etc/ansible
+ADD inventory /etc/ansible/hosts
+ADD ansible.cfg /etc/ansible/ansible.cfg
+
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
 RUN yum -y update; \
@@ -34,17 +45,6 @@ RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 # http://docs.ansible.com/ansible/intro_installation.html#running-from-source
 RUN easy_install pip
 RUN pip install paramiko PyYAML Jinja2 httplib2 six
-
-# Prepare the ansible environment
-RUN mkdir /etc/ansible
-ADD inventory /etc/ansible/hosts
-ADD ansible.cfg /etc/ansible/ansible.cfg
-
-# Copy the ssh private key
-RUN mkdir /root/.ssh
-ADD id_rsa /root/.ssh/id_rsa
-RUN chmod 0700 /root/.ssh
-RUN chmod 0400 /root/.ssh/id_rsa
 
 # Get the latest ansible
 RUN mkdir /opt/ansible

@@ -10,6 +10,17 @@ FROM ubuntu:14.04
 
 MAINTAINER Kei Nohguchi <kei@nohguchi.com>
 
+# Copy the ssh private key
+RUN mkdir /root/.ssh
+ADD id_rsa /root/.ssh/id_rsa
+RUN chmod 0700 /root/.ssh
+RUN chmod 0400 /root/.ssh/id_rsa
+
+# Prepare the ansible environment
+RUN mkdir /etc/ansible
+ADD inventory /etc/ansible/hosts
+ADD ansible.cfg /etc/ansible/ansible.cfg
+
 # Required package(s)
 RUN apt-get -y update && \
     apt-get install -y openssh-client git \
@@ -19,17 +30,6 @@ RUN apt-get -y update && \
 # http://docs.ansible.com/ansible/intro_installation.html#running-from-source
 RUN easy_install pip
 RUN pip install paramiko PyYAML Jinja2 httplib2 six
-
-# Prepare the ansible environment
-RUN mkdir /etc/ansible
-ADD inventory /etc/ansible/hosts
-ADD ansible.cfg /etc/ansible/ansible.cfg
-
-# Copy the ssh private key
-RUN mkdir /root/.ssh
-ADD id_rsa /root/.ssh/id_rsa
-RUN chmod 0700 /root/.ssh
-RUN chmod 0400 /root/.ssh/id_rsa
 
 # Get the latest ansible
 RUN mkdir /opt/ansible
