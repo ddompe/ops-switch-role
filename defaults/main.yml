@@ -1,7 +1,8 @@
 ---
 # defaults file for the switch role.
 
-# default host variable, which is required variable of ops_*.py modules.
+# default host variable, which is required by ops_*.py modules.
+# This variable actually used in in REST transport case.
 host: "{{ ansible_host }}"
 
 # default remote user on the switch
