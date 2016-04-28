@@ -1,10 +1,10 @@
 {# OpenSwitch Bridge table JSON template file #}
 
 "Bridge": {
-  {% for br in ops_bridges %}
+  {% for br in ops_bridges -%}
     "{{ br.name }}": {
-      {% if br.ports is defined %}
-        "ports": [ {% for port in br.ports %}
+      {% if br.ports is defined -%}
+        "ports": [ {% for port in br.ports -%}
           "{{ port }}" {% if not loop.last %} , {% endif %}
         {% endfor %} ],
       {% endif %}

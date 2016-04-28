@@ -3,12 +3,12 @@
 "System": {
 
   {# System.bridges column #}
-  {% if ops_bridges is defined %}
+  {% if ops_bridges is defined -%}
     {% include ['ops_system_bridges.j2'] %},
   {% endif %}
 
   {# System.vrfs column #}
-  {% if ops_vrfs is defined %}
+  {% if ops_vrfs is defined -%}
     {% include ['ops_system_vrfs.j2'] %},
   {% endif %}
 
