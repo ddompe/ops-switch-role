@@ -1,5 +1,8 @@
 ---
-# defaults file for switch
+# defaults file for the switch role.
+
+# default host variable, which is required variable of ops_*.py modules.
+host: "{{ ansible_host }}"
 
 # default remote user on the switch
 remote_user: admin
