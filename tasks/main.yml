@@ -8,7 +8,7 @@
   become: yes
   ops_template:
     src: main.j2
-    host: "{{ host }}"
+    host: "{{ ansible_host }}"
   register: ops_result
 
 - name: result from the switch
